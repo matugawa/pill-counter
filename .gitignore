@@ -22,3 +22,9 @@ runs/
 
 # その他
 *.cache
+
+# Environment
+.env
+
+.node_modules/
+.next/

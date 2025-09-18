@@ -1,0 +1,12 @@
+torch
+torchvision
+torchaudio
+ultralytics
+opencv-python
+matplotlib
+pyyaml
+scipy
+pandas
+pillow
+pillow-heif
+labelImg

@@ -15,10 +15,12 @@ venv/
 .vscode/
 
 # YOLO/ML関連
-runs/
-*.pt
-*.onnx
-*.ckpt
+ml/dataset/
+ml/images/
+ml/runs/
+ml/*.pt
+ml/*.onnx
+ml/*.ckpt
 
 # その他
 *.cache

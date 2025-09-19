@@ -1,0 +1,8 @@
+argparse
+asyncpg
+fastapi>=0.100.0
+python-dotenv
+requests
+
+
+uvicorn[standard]

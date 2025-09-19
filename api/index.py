@@ -34,7 +34,9 @@ app = FastAPI(lifespan=lifespan)
 async def read_root():
     return {"message": "FastAPI is running"}
 
-
+@app.get("/predict")
+async def predict():
+    return {"message": "predict"}
 
 if __name__ == "__main__":
     uvicorn.run("index:app", host="0.0.0.0", port=8502)

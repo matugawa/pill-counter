@@ -9,10 +9,20 @@ type HeaderProps = {
 export default function Header({ onToggle }: HeaderProps) {
   const [active, setActive] = useState(false);
 
-  const handleClick = () => {
+  const handleClick = async () => {
     const next = !active;
     setActive(next);
     onToggle(next);
+
+    if(next){
+      try{
+        const res = await fetch("/api/start");
+        const data = await res.json();
+        console.log("FE START", data);
+      }catch(err){
+        console.error("Error fetching from FastAPI:", err);
+      }
+    }
   };
 
   return (

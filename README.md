@@ -7,3 +7,5 @@
 
 WebSocket/ストリーミング方式
 ![AR](ws.png)
+
+- BEからはtext, binaryの2 channelで戻す

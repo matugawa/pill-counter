@@ -4,9 +4,10 @@ import { useState } from "react";
 
 type HeaderProps = {
   onToggle: (active: boolean) => void;
+  onResult: (img: string) => void;
 };
 
-export default function Header({ onToggle }: HeaderProps) {
+export default function Header({ onToggle, onResult }: HeaderProps) {
   const [active, setActive] = useState(false);
 
   const handleClick = async () => {
@@ -15,12 +16,43 @@ export default function Header({ onToggle }: HeaderProps) {
     onToggle(next);
 
     if(next){
-      try{
-        const res = await fetch("/api/start");
-        const data = await res.json();
-        console.log("FE START", data);
-      }catch(err){
-        console.error("Error fetching from FastAPI:", err);
+      const ws = new WebSocket("ws://localhost:8502/predict");
+
+      ws.onopen = ()=>{
+        console.log("WS OPEN");
+      
+        const canvas = document.createElement("canvas");
+        const video = document.querySelector("video") as HTMLVideoElement;
+
+        const sendFrame = () => {
+          if(!video || ws.readyState !== WebSocket.OPEN) return;
+
+          const ctx = canvas.getContext("2d");
+          if(!ctx) return;
+
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+
+          ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+
+          canvas.toBlob((blob) => {
+            if(!blob) return
+            ws.send(blob);
+            console.log("Frame sent:", blob.size);
+          }, "image/jpeg", 0.8);
+        }
+        setInterval(sendFrame, 3000);
+      }
+
+      ws.onmessage = (event) => {
+        if(typeof event.data === 'string'){
+          const meta = JSON.parse(event.data);
+          console.log("COUNT", meta.count);
+        }else{
+          const blob = event.data as Blob;
+          const url = URL.createObjectURL(blob);
+          onResult(url);
+        }
       }
     }
   };

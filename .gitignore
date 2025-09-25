@@ -30,3 +30,4 @@ ml/*.ckpt
 
 .node_modules/
 .next/
+*.pt

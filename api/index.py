@@ -3,6 +3,7 @@ import io
 import json
 import re
 import os
+import uuid
 from PIL import Image
 import asyncpg
 from dotenv import load_dotenv
@@ -48,6 +49,8 @@ async def websocket_predict(ws: WebSocket):
         while True:
             data = await ws.receive_bytes()
             print("WS received:", len(data))
+
+            frame_id = str(uuid.uuid4())
             img = Image.open(io.BytesIO(data)).convert("RGB")
             results = model(img)
 
@@ -61,6 +64,7 @@ async def websocket_predict(ws: WebSocket):
                     })
         
             await ws.send_text(json.dumps({
+                "frame_id": frame_id,
                 "count": len(detection),
                 "detection": detection,
             }))
@@ -69,7 +73,7 @@ async def websocket_predict(ws: WebSocket):
             buf = io.BytesIO()
             Image.fromarray(plotted[..., ::-1]).save(buf, format="JPEG")
             await ws.send_bytes(buf.getvalue())
-            
+
     except WebSocketDisconnect:
         print("Client disconnected")
         

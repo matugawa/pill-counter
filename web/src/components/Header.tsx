@@ -5,10 +5,12 @@ import { useState } from "react";
 type HeaderProps = {
   onToggle: (active: boolean) => void;
   onResult: (img: string) => void;
+  onResultCount: (count: number) => void;
 };
 
-export default function Header({ onToggle, onResult }: HeaderProps) {
+export default function Header({ onToggle, onResult, onResultCount }: HeaderProps) {
   const [active, setActive] = useState(false);
+  let pending: { frame_id: string; count: number } | null = null;
 
   const handleClick = async () => {
     const next = !active;
@@ -47,11 +49,18 @@ export default function Header({ onToggle, onResult }: HeaderProps) {
       ws.onmessage = (event) => {
         if(typeof event.data === 'string'){
           const meta = JSON.parse(event.data);
-          console.log("COUNT", meta.count);
+          if (meta.frame_id && meta.count !== undefined) {
+            pending = { frame_id: meta.frame_id, count: meta.count };
+          }
         }else{
           const blob = event.data as Blob;
           const url = URL.createObjectURL(blob);
-          onResult(url);
+          
+          if(pending){
+            onResult(url);
+            onResultCount(pending.count);
+            pending = null;
+          }
         }
       }
     }

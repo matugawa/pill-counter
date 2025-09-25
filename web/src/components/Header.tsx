@@ -67,7 +67,7 @@ export default function Header({ onToggle, onResult, onResultCount }: HeaderProp
   };
 
   return (
-    <header className="h-[200px] flex items-start justify-start p-4 bg-gray-100">
+    <header className="h-[140px] flex items-start justify-start p-4 bg-white">
       <button
         onClick={handleClick}
         className={`w-[150px] h-[100px] text-xl font-bold rounded-lg shadow-md ${

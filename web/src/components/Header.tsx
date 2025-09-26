@@ -18,7 +18,7 @@ export default function Header({ onToggle, onResult, onResultCount }: HeaderProp
     onToggle(next);
 
     if(next){
-      const ws = new WebSocket("ws://localhost:8502/predict");
+      const ws = new WebSocket(process.env.NEXT_PUBLIC_WS_URL!)
 
       ws.onopen = ()=>{
         console.log("WS OPEN");

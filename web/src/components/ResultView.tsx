@@ -2,6 +2,7 @@
 
 type ResultViewProps = {
   img: string | null;
+  count: number | null;
 };
 
 export default function ResultView({ img, count }: ResultViewProps) {

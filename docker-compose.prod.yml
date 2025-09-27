@@ -4,7 +4,7 @@ services:
   web:
     build:
       context: ./web
-      dockerfile: Dockerfile.prod
+      dockerfile: Dockerfile.prod.localbuild
     ports:
       - 3100:3000
     environment:
